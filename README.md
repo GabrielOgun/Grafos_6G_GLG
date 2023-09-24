@@ -1,1 +1,2 @@
 # Grafos_6G_GLG
+Nossa proposta consiste em desenvolver um grafo de relações entre indivíduos, visando quantificar a probabilidade de transmissão de infecções entre eles. Dado que constantemente interagimos com outras pessoas, cada pessoa é representada  por um vértice e a relação por uma aresta não direcionada, cujo peso é determinado pela porcentagem de probabilidade de transmissão. Essa porcentagem é calculada com base na frequência de contato diário entre os indivíduos envolvidos.
