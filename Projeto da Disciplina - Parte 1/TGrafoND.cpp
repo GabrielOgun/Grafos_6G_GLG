@@ -1,16 +1,31 @@
+/*
+//-----------------Projeto Parte 1 ------------------//
+Implementacao  Teoria de Graus de Separacao 
+- Transmissao Doenças,usando Matriz de Adjacência e 
+métodos para utilizaçao de um grafo Não Dirigido.
+//---------------------------------------------------//
+
+Profº IVAN CARLOS ALCANTARA DE OLIVEIRA
+Integrantes:
+  Gabriel Kury Fonseca - 32153848
+  Gabriel Marques Gonçalves Almeida - 32066724
+  Leoanrdo Borim Silva - 32154410
+*/
+
 #include <iostream>
-using namespace std;
 #include "TGrafoND.h"
 #include <limits>
 #include <locale.h>
 #include <fstream>
 
+using namespace std;
 
-
-TGrafoND::TGrafoND( int n ){
+TGrafoND::TGrafoND(int n){
+    // No inicio dos tempos nao ha arestas e tipo do grafo é constante
     this->n = n;
-    // No in�cio dos tempos n�o h� arestas
-    this->m = 0; 
+    this->tipoGrafo = 2;
+    this->m = 0;
+  
 
     this->porcentagemDoenca = 1.0;
   
@@ -19,33 +34,50 @@ TGrafoND::TGrafoND( int n ){
     for(int i = 0; i < n; i++)
     	adjac[i]= new float[n];
     adj = adjac;
+  
     // Inicia a matriz com zeros (Ex3. agora com 'infinitos')
 	for(int i = 0; i< n; i++)
 		for(int j = 0; j< n; j++)
-			adj[i][j]= std::numeric_limits<float>::infinity();
+			adj[i][j]= INF;
 
 }
 
-// Destructor, respons�vel por
-// liberar a mem�ria alocada para a matriz
+// Destructor, responsavel por
+// liberar a memoria alocada para a matriz
 TGrafoND::~TGrafoND(){
 	n = 0;
 	m = 0;
 	delete [] *adj;
-	std::cout << "espa�o liberado";
+	cout << "espa�o liberado";
 }
 
 float TGrafoND::getPorcentagemDoenca(){
   return porcentagemDoenca;
 }
 
+int TGrafoND::getn(){
+  return n;
+}
+
+int TGrafoND::getm(){
+  return m;
+}
+
+int TGrafoND::getTipoGrafo(){
+  return tipoGrafo;
+}
+
 void TGrafoND::setPorcentagemDoenca(float novaPorcentagem){
   porcentagemDoenca = novaPorcentagem;
 }
 
+void TGrafoND::setm(int newM){
+  m = newM;
+}
+
 void TGrafoND::insereConexao( int v, int w, float valor){
     // testa se nao temos a aresta
-    if(adj[v][w] == std::numeric_limits<float>::infinity() ){
+    if(adj[v][w] == INF ){
         adj[v][w] = valor * porcentagemDoenca;
         adj[w][v] = valor * porcentagemDoenca;
         m++; // atualiza qtd arestas
@@ -55,121 +87,17 @@ void TGrafoND::insereConexao( int v, int w, float valor){
 // remove uma aresta v->w do Grafo
 void TGrafoND::removeConexao(int v, int w){
     // testa se temos a aresta
-    if(adj[v][w] != std::numeric_limits<float>::infinity() ){
-        adj[v][w] = std::numeric_limits<float>::infinity();
-        adj[w][v] = std::numeric_limits<float>::infinity();
+    if(adj[v][w] != INF ){
+        adj[v][w] = INF;
+        adj[w][v] = INF;
         m--; // atualiza qtd arestas
     }
 }
 
-void TGrafoND::show(){
-    std::cout << "n: " << n << std::endl;
-    std::cout << "m: " << m << std::endl;
-    for( int i=0; i < n; i++){
-        std::cout << "\n";
-        for( int w=0; w < n; w++)
-            /*if(adj[i][w] == 1)
-                std::cout << "Adj[" << i<< "," << w << "]= 1" << " ";
-            else std::cout << "Adj[" << i<< "," << w << "]= 0" << " ";*/
-          std::cout << "Adj[" << i<< "," << w << "]= " << adj[i][w] << " ";
-    }
-    cout <<"\nfim da impressao do grafo." << endl;
-
-}
-
-int TGrafoND::completo(){
-  if(n == (m * (m - 1)) / 2){
-    std::cout << "Eh completo";
-    return 1;
-  }
-
-  std::cout << "NAO eh completo";
-  return 0;
-}
-
-
-float TGrafoND::complemento(){
-  float **aux;
-  float **auxi = new float*[n];
-    for(int i = 0; i < n; i++)
-    	auxi[i]= new float[n];
-    aux = auxi;
-    // Inicia a matriz com zeros (Ex3. agora com 'infinitos')
-	for(int i = 0; i< n; i++)
-		for(int j = 0; j< n; j++)
-			aux[i][j]= std::numeric_limits<float>::infinity();
-
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < n; j++){
-      if(adj[i][j] == std::numeric_limits<float>::infinity() && i != j){
-        aux[i][j] = 1.0;
-      }
-    }
-  }
-
-  return 1.0; //precisa mudar para retornar a matriz gerada
-}
-
-
-
-int TGrafoND::inDegree(int v){
-  int count = 0;
-  for(int i = 0; i < n; i++){
-    if(adj[i][v] != std::numeric_limits<float>::infinity()){
-      count++;
-    }
-  }
-  return count;
-}
-
-
-int TGrafoND::outDegree(int v){
-  int count = 0;
-  for(int i = 0; i < n; i++){
-    if(adj[v][i] != std::numeric_limits<float>::infinity()){
-      count++;
-    }
-  }
-  return count;
-}
-
-
-int TGrafoND::conexidade(){
-  for(int i = 0; i < n; i++){
-   if(outDegree(i) == 0 && inDegree(i) == 0){
-     std::cout << "Desconexo";
-     return 1;
-   }
-  }
-  std::cout << "Conexo";
-  return 0;
-}
-
-void TGrafoND::aumentaMatriz(){
-  float** nova_matriz = new float*[n+1];
-    for (int i = 0; i < (n+1); i++) {
-        nova_matriz[i] = new float[n+1];
-    }
-
-   for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
-          nova_matriz[i][j] = adj[i][j];
-        }
-    }
-
-  for(int i = 0; i < (n + 1); i++){
-    nova_matriz[n][i] = std::numeric_limits<float>::infinity();
-    nova_matriz[i][n] = std::numeric_limits<float>::infinity();
-  }
-
-  delete [] *adj; //talvez ainda tenha vazemento de memoria e tenha q retirar linha por linha
-  adj = nova_matriz;
-  n = n+1;
-}
-
-void TGrafoND::retiraVertice(int vertice){
+// remove um vertice da matriz
+void TGrafoND::removeVertice(int vertice){
   for(int i = 0;i < n;i++){
-    if(adj[vertice][i] != std::numeric_limits<float>::infinity()){
+    if(adj[vertice][i] != INF){
       m--;
     }
   }
@@ -209,13 +137,116 @@ void TGrafoND::retiraVertice(int vertice){
   n = n-1;
 }
 
-//------------------------------------- Borel Funcs
-int TGrafoND::getn(){
-  return n;
+void TGrafoND::show(){
+    cout << "n: " << n << endl;
+    cout << "m: " << m << endl;
+
+    // Largura para a formatacao do print
+    int larguraCampo = 7;
+
+    cout << std::setw(larguraCampo) << "  ";
+    for (int i = 0; i < n; i++) {
+        cout << std::setw(larguraCampo) << "[" << i << "]";
+    }
+    cout << std::endl;
+
+    for (int i = 0; i < n; i++) {
+        // Índice do vértice
+        cout << std::setw(larguraCampo) << "[" << i << "]";
+        
+        for (int w = 0; w < n; w++) {
+            // Use std::setw para definir a largura do campo
+            cout << std::setw(larguraCampo) << std::fixed << std::setprecision(2) << adj[i][w];
+        }
+        cout << endl; // Mude de linha para a próxima linha da matriz
+    }
+    cout <<"\nfim da impressao do grafo." << endl;
+
 }
 
-int TGrafoND::getm(){
-  return m;
+int TGrafoND::completo(){
+  if(n == (m * (m - 1)) / 2){
+    cout << "Eh completo";
+    return 1;
+  }
+
+  cout << "NAO eh completo";
+  return 0;
+}
+
+float TGrafoND::complemento(){
+  float **aux;
+  float **auxi = new float*[n];
+    for(int i = 0; i < n; i++)
+    	auxi[i]= new float[n];
+    aux = auxi;
+    // Inicia a matriz com zeros (Ex3. agora com 'infinitos')
+	for(int i = 0; i< n; i++)
+		for(int j = 0; j< n; j++)
+			aux[i][j]= INF;
+
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < n; j++){
+      if(adj[i][j] == INF && i != j){
+        aux[i][j] = 1.0;
+      }
+    }
+  }
+
+  return 1.0; //precisa mudar para retornar a matriz gerada
+}
+
+int TGrafoND::inDegree(int v){
+  int count = 0;
+  for(int i = 0; i < n; i++){
+    if(adj[i][v] != INF){
+      count++;
+    }
+  }
+  return count;
+}
+
+int TGrafoND::outDegree(int v){
+  int count = 0;
+  for(int i = 0; i < n; i++){
+    if(adj[v][i] != INF){
+      count++;
+    }
+  }
+  return count;
+}
+
+int TGrafoND::conexidade(){
+  for(int i = 0; i < n; i++){
+   if(outDegree(i) == 0 && inDegree(i) == 0){
+     cout << "Desconexo";
+     return 1;
+   }
+  }
+  cout << "Conexo";
+  return 0;
+}
+
+void TGrafoND::aumentaMatriz(){
+  float** nova_matriz = new float*[n+1];
+    for (int i = 0; i < (n+1); i++) {
+        nova_matriz[i] = new float[n+1];
+    }
+
+   for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+          nova_matriz[i][j] = adj[i][j];
+        }
+    }
+
+  for(int i = 0; i < (n + 1); i++){
+    nova_matriz[n][i] = INF;
+    nova_matriz[i][n] = INF;
+  }
+
+  delete [] *adj; //talvez ainda tenha vazemento de memoria e tenha q retirar linha por linha
+  adj = nova_matriz;
+  n = n+1;
 }
 
 float TGrafoND::acessarPosicao(int v, int w)

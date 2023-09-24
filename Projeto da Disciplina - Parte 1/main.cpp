@@ -1,74 +1,89 @@
-#include "TGrafoND.h"
-
 /*
-struct GrafoENomes {
-    TGrafoND grafo;
-    std::string* nomes;
-};
+//-----------------Projeto Parte 1 ------------------//
+Implementacao  Teoria de Graus de Separacao 
+- Transmissao Doenças,usando Matriz de Adjacência e 
+métodos para utilizaçao de um grafo Não Dirigido.
+//---------------------------------------------------//
+
+Profº IVAN CARLOS ALCANTARA DE OLIVEIRA
+Integrantes:
+  Gabriel Kury Fonseca - 32153848
+  Gabriel Marques Gonçalves Almeida - 32066724
+  Leoanrdo Borim Silva - 32154410
 */
 
+#include "TGrafoND.h"
+
+const std::string arquivo = "grafo.txt";
 std::string* nomes;
 
 TGrafoND leArquivo(){
-    fstream file;
-    string word, t, q, filename;
- 
-    // filename of the file
-    filename = "grafo.txt";
- 
-    // opening file
-    file.open(filename.c_str());
-
-    file >> word;
-    file >> word;
-
-    int aux = stoi(word);
-    int aux2;
-    float auxf;
-    string concatena;
-
-    TGrafoND g(aux);
-    nomes = new string[aux]; //Faz um vetor dinamico para os nomes. NAO ESQUECER DO DELETE[]
-
-    for(int i = 0;i < aux;i++){
-      file >> word;
-      file >> concatena;
-      file >> word;
-      
-      concatena +=" " + word;
-      
-      nomes[i] = concatena;
-      
-      //concatena = "";
-    }
-
-    file >> word;
-    
-    // extracting words from the file
-    while (file >> word)
-    {
-      aux = stoi(word);
-      file >> word;
-      aux2 = stoi(word);
-      file >> word;
-      auxf = stof(word);
-
-      g.insereConexao(aux, aux2, auxf);
-    }
+  try{
+      fstream file;
+      string word, t, q, filename;
+   
+      // Arquivo de entrada
+      filename = arquivo;
+   
+      // Abrindo o arquivo
+      file.open(filename.c_str());
   
-  //GrafoENomes resultado = {g, nomes};
-    file.close();
-    return g;
+      file >> word;
+      file >> word;
+  
+      int aux = stoi(word);
+      int aux2;
+      float auxf;
+      string concatena;
+  
+      TGrafoND g(aux);
+      
+      //Faz um vetor dinamico para os nomes.
+      nomes = new string[aux]; 
+  
+      for(int i = 0;i < aux;i++){
+        file >> word;
+        file >> concatena;
+        file >> word;
+        
+        concatena +=" " + word;
+        
+        nomes[i] = concatena;
+        
+      }
+  
+      file >> word;
+      
+      // Extraindo as arestas e os pesos
+      while (file >> word)
+      {
+        aux = stoi(word);
+        file >> word;
+        aux2 = stoi(word);
+        file >> word;
+        auxf = stof(word);
+  
+        g.insereConexao(aux, aux2, auxf);
+      }
+    
+      file.close();
+      cout << "\n>>> Leitura Concluida com sucesso!\n";
+      return g;
+    
+  } catch (const std::exception& e) { // Caso a leitura não seja feita no formato correto
+        cout << "\n** Excecao capturada: " << e.what() << "\n--Verifique se o arquivo de entrada esta correto!\n"<< endl;
+    exit(1);
+  } catch (...) {
+        cout << "\n** Excecao desconhecida capturada.\n" << endl;
+        exit(1);
+  }
 }
 
 void exibeArquivo(){
     fstream file;
     string word, t, q, filename;
- 
-    // filename of the file
-    filename = "grafo.txt";
- 
-    // opening file
+
+    filename = arquivo;
     file.open(filename.c_str());
 
     file >> word;
@@ -105,18 +120,19 @@ void exibeArquivo(){
       std::cout << word << "\n";
     }
     file.close();
+    
 }
 
 void gravarArquivo(TGrafoND* g){
   ofstream file;
   string word, t, q, filename;
 
-  filename = "grafo.txt";
+  filename = arquivo;
   
   file.open(filename.c_str());
   if(file.is_open()){
-    //colocar o primeiro item do txt
-    file << "2" << endl;
+    
+    file << g->getTipoGrafo() << endl;
     file << g->getn() << endl;
     for(int i=0; i < g->getn(); i++)
     {
@@ -127,15 +143,18 @@ void gravarArquivo(TGrafoND* g){
     for(int v=0; v < g->getn(); v++){
       for(int w=0; w < (v + 1); w++)
       {
-        if(g->acessarPosicao(v,w) != std::numeric_limits<float>::infinity()){
+        if(g->acessarPosicao(v,w) != INF){
           file << v << ' ' << w << ' ' << g->acessarPosicao(v, w) << endl;
         }
       }
     }
+    cout << "\n>>> Dados gravados com sucesso!\n";
     
-  }  
+  }
+  else{
+    cout << "\n** Exececao encontrada: Arquivo nao encontrado **\n";
+  }
 }
-
 
 int main(){
 
@@ -143,17 +162,17 @@ int main(){
   
   char opcao;
 
-  std::cout << "TEORIA DOS APERTOS DE MAO ~ VERSAO SAUDE\n";
+  std::cout << "\n**** TEORIA DOS GRAUS DE SEPARACAO ~ TRANSMISSAO DE DOENCAS ****\n";
 
   do{
-    std::cout << "_________________________________________" 
+    std::cout << "__________________________________________________________________" 
               << "\nEscolha uma opcao:\n\n"
               << "a) Ler dados do arquivo.txt\n"
               << "b) Gravar dados no arquivo.txt\n"
-              << "c) Inserir vertice\n"
-              << "d) Inserir aresta\n"
-              << "e) Remover vertice\n"    
-              << "f) Remover aresta\n"
+              << "c) Inserir Pessoa\n"
+              << "d) Inserir Conexao\n"
+              << "e) Remover Pessoa\n"    
+              << "f) Remover Conexao\n"
               << "g) Mostrar conteudo do arquivo\n"
               << "h) Mostrar Grafo\n"
               << "i) Apresentar a conexidade do grafo\n"
@@ -164,7 +183,7 @@ int main(){
 
     switch(opcao){
       case 'a': {
-        grafo = new TGrafoND (leArquivo()); 
+        grafo = new TGrafoND (leArquivo());
         break;
       }
       
@@ -178,11 +197,11 @@ int main(){
         string* vetAux = new string[grafo->getn()];
         string nomeNovo;
         string auxnome;
-        std::cout << "Insira o nome da pessoa nova no seguinte formato: <Nome> [Espaco] <Sobrenome>";
+        std::cout << "Insira o nome da pessoa nova no seguinte formato: <Nome> [Espaco] <Sobrenome>: ";
         std::cin >> nomeNovo;
         std::cin >> auxnome;
         nomeNovo += " " + auxnome;
-        //std::cout << "\n\nNome: " << nomeNovo << " vet: " << vetAux[(grafo->getn() - 1)] << "\n\n";
+        
         for(int i = 0;i < (grafo->getn() - 1);i++){
           vetAux[i] = nomes[i];
         }
@@ -193,7 +212,7 @@ int main(){
         vetAux = nullptr;
 
         nomes[(grafo->getn() - 1)] = nomeNovo;
-        
+        cout << "\n>>> Pessoa Adicionada ao grafo!\n";
         break;
       }
 
@@ -211,15 +230,16 @@ int main(){
         std::cin >> aux3;
         
         grafo->insereConexao(aux, aux2, aux3);
+        cout << "\n>>> Conexao Adicionada!\n";
         break;
           }
 
       case 'e':{
-        std::cout << "\n\nInsira o ID do vértice que deseja retirar ";
+        std::cout << "\n\nInsira o ID da pessoa que deseja retirar: ";
         int vertice;
         std::cin >> vertice;
        
-        grafo->retiraVertice(vertice);
+        grafo->removeVertice(vertice);
 
         string* vetAux = new string[grafo->getn()];
         
@@ -243,20 +263,22 @@ int main(){
           delete[] nomes;
           nomes = vetAux;
           vetAux = nullptr;          
-        }        
+        }
+        cout << "\n>>> Pessoa removida do grafo!\n";
         break;
       }  
 
       case 'f':{
         int aux, aux2;
         
-        std::cout << "Insira um dos pontos da aresta.";
+        std::cout << "Insira o ID de uma das pessoas da conexao: ";
         std::cin >> aux;
         
-        std::cout << "Insira o outro ponto da aresta.";
+        std::cout << "Insira o ID da outra pessoa da conexao: ";
         std::cin >> aux2;
         
         grafo->removeConexao(aux, aux2);
+        cout << "\n>>> Conexao Removida!\n";
         break;
       }
 
