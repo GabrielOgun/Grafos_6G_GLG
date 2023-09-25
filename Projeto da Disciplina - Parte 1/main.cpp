@@ -211,13 +211,13 @@ int main(){
         int aux, aux2;
         float aux3;
 
-        std::cout << "Insira o ID de uma pessoa";
+        std::cout << "Insira o ID de uma pessoa: ";
         std::cin >> aux;
 
-        std::cout << "Insira o ID da outra pessoa";
+        std::cout << "Insira o ID da outra pessoa: ";
         std::cin >> aux2;
 
-        std::cout << "Insira a chance destas pessoas de encontrarem (0 a 100)";
+        std::cout << "Insira a chance destas pessoas de encontrarem (0 a 100): ";
         std::cin >> aux3;
         
         grafo->insereConexao(aux, aux2, aux3);
@@ -286,6 +286,10 @@ int main(){
         grafo->conexidade();
         break;
       }
+
+      default:
+        if(opcao != 'z')
+          cout << "\n>>> Entrada Inválida! Tente Novamente...\n";
     
     }
     
@@ -295,5 +299,7 @@ int main(){
     delete grafo;
     delete[] nomes;
   }
-    return 0;
+
+  cout << "\n>>> Fim do Programa!";
+  return 0;
 }

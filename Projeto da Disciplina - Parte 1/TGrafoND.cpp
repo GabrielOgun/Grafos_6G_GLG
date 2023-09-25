@@ -48,7 +48,7 @@ TGrafoND::~TGrafoND(){
 	n = 0;
 	m = 0;
 	delete [] *adj;
-	cout << "espa�o liberado";
+	cout << "\n>>> espaco liberado!\n";
 }
 
 float TGrafoND::getPorcentagemDoenca(){
@@ -155,22 +155,22 @@ void TGrafoND::show(){
         cout << std::setw(larguraCampo) << "[" << i << "]";
         
         for (int w = 0; w < n; w++) {
-            // Use std::setw para definir a largura do campo
+            // std::setw para definir a largura do campo
             cout << std::setw(larguraCampo) << std::fixed << std::setprecision(2) << adj[i][w];
         }
         cout << endl; // Mude de linha para a próxima linha da matriz
     }
-    cout <<"\nfim da impressao do grafo." << endl;
+    cout <<"\n>>> Fim da impressao do grafo." << endl;
 
 }
 
 int TGrafoND::completo(){
   if(n == (m * (m - 1)) / 2){
-    cout << "Eh completo";
+    cout << "\n>>> Eh completo\n";
     return 1;
   }
 
-  cout << "NAO eh completo";
+  cout << "\n>>>NAO eh completo\n";
   return 0;
 }
 
@@ -219,11 +219,11 @@ int TGrafoND::outDegree(int v){
 int TGrafoND::conexidade(){
   for(int i = 0; i < n; i++){
    if(outDegree(i) == 0 && inDegree(i) == 0){
-     cout << "Desconexo";
+     cout << "\n>>> C0 - Desconexo\n";
      return 1;
    }
   }
-  cout << "Conexo";
+  cout << "\n>>> C1 - Conexo\n";
   return 0;
 }
 
