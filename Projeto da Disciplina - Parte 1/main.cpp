@@ -18,65 +18,56 @@ const std::string arquivo = "grafo.txt";
 std::string* nomes;
 
 TGrafoND leArquivo(){
-  try{
-      fstream file;
-      string word, t, q, filename;
-   
-      // Arquivo de entrada
-      filename = arquivo;
-   
-      // Abrindo o arquivo
-      file.open(filename.c_str());
+    fstream file;
+    string word, t, q, filename;
   
+    // Arquivo de entrada
+    filename = arquivo;
+  
+    // Abrindo o arquivo
+    file.open(filename.c_str());
+
+    file >> word;
+    file >> word;
+
+    int aux = stoi(word);
+    int aux2;
+    float auxf;
+    string concatena;
+
+    TGrafoND g(aux);
+    
+    //Faz um vetor dinamico para os nomes.
+    nomes = new string[aux]; 
+
+    for(int i = 0;i < aux;i++){
       file >> word;
-      file >> word;
-  
-      int aux = stoi(word);
-      int aux2;
-      float auxf;
-      string concatena;
-  
-      TGrafoND g(aux);
-      
-      //Faz um vetor dinamico para os nomes.
-      nomes = new string[aux]; 
-  
-      for(int i = 0;i < aux;i++){
-        file >> word;
-        file >> concatena;
-        file >> word;
-        
-        concatena +=" " + word;
-        
-        nomes[i] = concatena;
-        
-      }
-  
+      file >> concatena;
       file >> word;
       
-      // Extraindo as arestas e os pesos
-      while (file >> word)
-      {
-        aux = stoi(word);
-        file >> word;
-        aux2 = stoi(word);
-        file >> word;
-        auxf = stof(word);
+      concatena +=" " + word;
+      
+      nomes[i] = concatena;
+      
+    }
+
+    file >> word;
+    
+    // Extraindo as arestas e os pesos
+    while (file >> word)
+    {
+      aux = stoi(word);
+      file >> word;
+      aux2 = stoi(word);
+      file >> word;
+      auxf = stof(word);
+
+      g.insereConexao(aux, aux2, auxf);
+    }
   
-        g.insereConexao(aux, aux2, auxf);
-      }
-    
-      file.close();
-      cout << "\n>>> Leitura Concluida com sucesso!\n";
-      return g;
-    
-  } catch (const std::exception& e) { // Caso a leitura não seja feita no formato correto
-        cout << "\n** Excecao capturada: " << e.what() << "\n--Verifique se o arquivo de entrada esta correto!\n"<< endl;
-    exit(1);
-  } catch (...) {
-        cout << "\n** Excecao desconhecida capturada.\n" << endl;
-        exit(1);
-  }
+    file.close();
+    cout << "\n>>> Leitura Concluida com sucesso!\n";
+    return g;
 }
 
 void exibeArquivo(){

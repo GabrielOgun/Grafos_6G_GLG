@@ -28,29 +28,29 @@ class TGrafoND{
 	private:
 		int n; // quantidade de vertices
 		int m; // quantidade de arestas
-    int tipoGrafo; // Armazena a o tipo do grafo
-    float porcentagemDoenca; // Porcentagem que define a capacidade da doenca ser transmitida
+	    int tipoGrafo; // Armazena a o tipo do grafo
+	    float porcentagemDoenca; // Porcentagem que define a capacidade da doenca ser transmitida
 		float **adj; //matriz de adjacencia
 	public:
 		TGrafoND( int n);
-    float getPorcentagemDoenca();
-    int getn();
-    int getm();
-    int getTipoGrafo();
-    void setPorcentagemDoenca(float novaPorcentagem);
-    void setm(int m);
+	    float getPorcentagemDoenca();
+	    int getn();
+	    int getm();
+	    int getTipoGrafo();
+	    void setPorcentagemDoenca(float novaPorcentagem);
+	    void setm(int m);
 		void insereConexao(int v, int w, float valor);
 		void removeConexao(int v, int w);
-    void removeVertice(int vertice);
+	    void removeVertice(int vertice);
 		void show();
-    int completo();
-    float complemento();
-    int inDegree(int v);
-    int outDegree(int v);
-    int conexidade();
-    void aumentaMatriz();
-    float acessarPosicao(int v, int w);
-		~TGrafoND();		
+	    int completo();
+	    float complemento();
+	    int inDegree(int v);
+	    int outDegree(int v);
+	    int conexidade();
+	    void aumentaMatriz();
+	    float acessarPosicao(int v, int w);
+	~TGrafoND();		
 };
 
 
