@@ -3,7 +3,7 @@
 * Gabriel Marques Gonçalves Almeida - **32066724**
 * Leonardo Borim Silva - **32154410**
 
-| _Status do Projeto_| Parte 1 |
+| _Status do Projeto_| Parte 2 |
 |--------------------|---------|
 
 ## Proposta do Projeto
