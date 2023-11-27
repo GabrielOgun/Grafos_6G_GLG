@@ -1,0 +1,9 @@
+2
+3
+0 kury Gabriel
+1 marques Gabriel
+2 Jorge benjor
+3
+0 1 60.0
+0 2 80.0
+1 2 80.0
